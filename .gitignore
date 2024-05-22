@@ -1,0 +1,101 @@
+# Logs
+logs/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids/*.pid
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/*
+*.lcov
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+yarn/cache
+yarn/unplugged
+yarn/build-state.yml
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+pnpm-lock.yaml
+
+# Caching
+.cache
+
+# Compiled binary addons (example: node-waf)
+build/Release
+
+# dotenv environment variables
+.env
+.env.local
+.env.test
+.env.development
+.env.production
+
+# Bundler / Packager specific
+#  - Webpack
+.webpack/cache
+webpack.config.js  # optional; exclude if you want to check it in
+#  - Parcel
+.parcel-cache
+
+# IDE temporary or cache files
+#  - VS Code
+.vscode/
+#  - WebStorm
+.idea/
+#  - Atom/Sublime Text
+.atom/
+.sublime-project
+
+# NPM module cache
+.npm
+# config.env
+
+# Optional: ESLint cache
+.eslintcache
+
+# Optional: stylelint cache
+.stylelintcache
+
+# Optional: TypeORM cache
+.typeormcache
+
+# Optional: Babel cache
+.babelrc
+.babelrc.js
+.babelrc.json
+
+# Optional: Any history/state files from your package manager if unnecessary
+.yarn/install-state.gz
+.pnp.*
+
+# Optional: Mac/Linux specific
+# Temporary directory created by npm install
+.tmp
+
+# Optional: Serverless directories
+.serverless/
+
+# Optional: Build folders
+dist
+out
+build
+
+# Optional: Type checking temporary files
+*.tsbuildinfo
+
+# Optional: Vue.js specific
+.vuepress/dist

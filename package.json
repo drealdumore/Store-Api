@@ -1,0 +1,26 @@
+{
+  "name": "store",
+  "version": "1.0.0",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "prod": "SET NODE_ENV=production&& nodemon server.js",
+    "debug": "ndb server.js"
+  },
+  "author": "saint",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.6.1",
+    "mongoose": "^8.3.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.2.0",
+    "eslint": "^8.57.0",
+    "globals": "^15.2.0"
+  }
+}
