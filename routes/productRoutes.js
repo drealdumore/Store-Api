@@ -3,8 +3,6 @@ import * as productController from "../controllers/productController.js";
 
 const router = express.Router();
 
-// const { getAllProducts, createProduct } = productController;
-
 router
   .route("/")
   .get(productController.getAllProducts)
