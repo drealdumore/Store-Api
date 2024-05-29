@@ -11,7 +11,7 @@ class AppError extends Error {
     // tenary to update status. if its 404 ? fail : error
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     // operational errors meant to be sent to the client
-    this.operational = true;
+    this.isOperational = true;
 
     // to trace the source of the error
     Error.captureStackTrace(this, this.constructor);

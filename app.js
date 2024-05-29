@@ -6,6 +6,8 @@ import morgan from "morgan";
 
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import globalErrorHandler from "./controllers/errorController.js";
+import AppError from "./utilities/appError.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,4 +28,13 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
+// UNDEFINEND ROUTES
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!.`, 404));
+});
+
+// GLOBAL ERROR HANDLER
+app.use(globalErrorHandler);
+
 export default app;
+// twillo recovery code: 2D78FC7CSKY3C64VHYVKURY7
