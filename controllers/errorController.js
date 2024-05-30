@@ -41,7 +41,7 @@ const sendDevError = (err, req, res) => {
 
   // RENDERED WEBSITE ERROR --- rendered but still in dev mode
   console.log("DEV RENDER ERROR💥: ", err);
-  return res.status(err.statusCode).render("error", {
+  return res.status(err.statusCode).json({
     title: "Something went wrong!",
     message: err.message,
   });
@@ -78,7 +78,7 @@ const sendProdError = (err, req, res) => {
   if (err.isOperational) {
     console.log("PROD Operational ERROR💥: ", err);
 
-    return res.status(err.statusCode).render("error", {
+    return res.status(err.statusCode).json({
       title: "Something went wrong!",
       message: err.message,
     });
@@ -87,7 +87,7 @@ const sendProdError = (err, req, res) => {
   // NON OPERATIONAL ERROR: unknown error: NOT MODIFIED
   console.log("PROD NON-Operational ERROR💥: ", err);
 
-  return res.status(err.statusCode).render("error", {
+  return res.status(err.statusCode).json({
     title: "Something went wrong!",
     message: "Please try again later",
   });

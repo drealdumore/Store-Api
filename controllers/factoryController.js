@@ -33,7 +33,7 @@ export const updateOne = (Model) =>
       return next(new AppError("No doucment with that ID", 404));
     }
 
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
       data: {
         data: doc,

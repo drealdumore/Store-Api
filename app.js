@@ -6,6 +6,8 @@ import morgan from "morgan";
 
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
+
 import globalErrorHandler from "./controllers/errorController.js";
 import AppError from "./utilities/appError.js";
 
@@ -27,6 +29,7 @@ if (process.env.NODE_ENV === "development") {
 // ROUTES
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
+app.use("/api/admin", adminRouter);
 
 // UNDEFINEND ROUTES
 app.all("*", (req, res, next) => {
@@ -37,4 +40,3 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandler);
 
 export default app;
-// twillo recovery code: 2D78FC7CSKY3C64VHYVKURY7

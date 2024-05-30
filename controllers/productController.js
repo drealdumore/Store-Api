@@ -91,8 +91,11 @@ import catchAsync from "../utilities/catchAsync.js";
 //   }
 // });
 
-export const getAllProducts = factory.getAll(Product);
-export const getAllProductsWithQuery = factory.getAllWithQuery(Product);
+export const getAllProducts = factory.getAllWithQuery(Product);
+
+// export const getAllProducts = factory.getAll(Product);
+// export const getAllProductsWithQuery = factory.getAllWithQuery(Product);
+
 export const createProduct = factory.createOne(Product);
 export const getProduct = factory.getOne(Product);
 export const getProductWithPopulate = factory.getOneWithPopulate(Product, {

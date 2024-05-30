@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-// import mongoose from "mongoose";
 import validator from "validator";
+import crypto from "crypto";
+import bcrypt from "bcryptjs";
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -48,9 +49,40 @@ const UserSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: true,
-    select: false,
+    select: false, // show in compass but not in response
   },
 });
+
+// PRE
+
+// HASH password before saving to db
+UserSchema.pre("save", async function (next) {
+  console.log(this.isModified("password"));
+
+  if (!this.isModified("password")) return next();
+
+  // hash the password with the cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // delete passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
+});
+
+// HIDE unactive users
+UserSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
+// METHODS
+// Check if HASHED PASSWORDS MATCHES
+UserSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model("User", UserSchema);
 
