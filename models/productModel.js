@@ -19,11 +19,11 @@ const ProductSchema = new mongoose.Schema(
     //     // enum: ["Gowns", "Tops", "Accessories", "Other"],
     //   },
     // ],
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: [true, "Please select a product category"],
-    },
+    // category: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Category",
+    //   required: [true, "Please select a product category"],
+    // },
     
     description: {
       type: String,

@@ -8,6 +8,7 @@ const CategorySchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+
   slug: String,
 
   description: {
@@ -23,21 +24,20 @@ const CategorySchema = new mongoose.Schema({
 
   createdAt: {
     type: Date,
-    default: Date.now, 
+    default: Date.now,
   },
 });
 
 CategorySchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const Category = mongoose.model("Category", CategorySchema);
 
 export default Category;
 
-
-
 // so how best??
-//  should the child know of the parent 
+//  should the child know of the parent
 // or the parent should know of the child
 // i want it t

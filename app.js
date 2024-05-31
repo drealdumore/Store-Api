@@ -7,6 +7,7 @@ import morgan from "morgan";
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
+import categoryRouter from "./routes/categoryRoutes.js";
 
 import globalErrorHandler from "./controllers/errorController.js";
 import AppError from "./utilities/appError.js";
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/category", categoryRouter);
 
 // UNDEFINEND ROUTES
 app.all("*", (req, res, next) => {
