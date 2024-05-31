@@ -99,7 +99,10 @@ export const getAllProducts = factory.getAllWithQuery(Product);
 export const createProduct = factory.createOne(Product);
 export const getProduct = factory.getOne(Product);
 export const getProductWithPopulate = factory.getOneWithPopulate(Product, {
-  path: "reviews",
+  path: "category",
 });
+// export const getProductWithPopulate = factory.getOneWithPopulate(Product, {
+//   path: "reviews",
+// });
 export const updateProduct = factory.updateOne(Product);
 export const deleteProduct = factory.deleteOne(Product);

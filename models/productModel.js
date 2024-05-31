@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
 
-
 const ProductSchema = new mongoose.Schema(
   {
     name: {
@@ -13,14 +12,19 @@ const ProductSchema = new mongoose.Schema(
 
     slug: String,
 
-    category: [
-      {
-        type: String,
-        required: [true, "Please select a product category"],
-        // enum: ["Gowns", "Tops", "Accessories", "Other"],
-      },
-    ],
-
+    // category: [
+    //   {
+    //     type: String,
+    //     required: [true, "Please select a product category"],
+    //     // enum: ["Gowns", "Tops", "Accessories", "Other"],
+    //   },
+    // ],
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: [true, "Please select a product category"],
+    },
+    
     description: {
       type: String,
       required: [true, "Please provide a product description"],
