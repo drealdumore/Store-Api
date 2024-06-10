@@ -53,8 +53,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// PRE
-
 // HASH password before saving to db
 UserSchema.pre("save", async function (next) {
   console.log(this.isModified("password"));
@@ -67,6 +65,14 @@ UserSchema.pre("save", async function (next) {
   // delete passwordConfirm field
   this.passwordConfirm = undefined;
   next();
+});
+
+// UPDATE passwordChangedAt -1sec
+UserSchema.pre("save", function (next) {
+  // if not modified || is new
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
 });
 
 // HIDE unactive users
@@ -82,6 +88,42 @@ UserSchema.methods.correctPassword = async function (
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// CEHCK if password has been changed over time
+// params: time
+UserSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    // parse as integer(value, base)
+    // Convert passwordChangedAt to seconds for comparison
+    const changedTineStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    // Check if JWT was issued before password change
+    return JWTTimeStamp < changedTineStamp;
+  }
+
+  return false;
+};
+
+// CREATE Random Password Reset Token
+UserSchema.methods.createPasswordResetToken = async function () {
+  // generate random 32 code convert to hex
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  // hash the resetToke
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // Set expiration time for the reset token (10 minutes)
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  // Return the Unhashed Reset Token to be sent to the user
+  return resetToken;
 };
 
 const User = mongoose.model("User", UserSchema);

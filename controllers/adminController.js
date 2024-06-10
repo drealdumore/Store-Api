@@ -73,14 +73,13 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-// export const createAdmin = catchAsync(async (req, res, next) => {
-//   const admin = await User.create({
-//     name: req.body.name,
-//     email: req.body.email,
-//     role: req.body.role,
-//     name: req.body.name,
-//   });
-// });
+export const createAdmin = catchAsync(async (req, res, next) => {
+  const admin = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  });
+});
 
 
 // how best to create admin

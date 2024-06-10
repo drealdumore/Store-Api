@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import {Schema, model} from "mongoose";
 import slugify from "slugify";
 
-const ProductSchema = new mongoose.Schema(
+const ProductSchema = new Schema(
   {
     name: {
       type: String,
@@ -19,12 +19,13 @@ const ProductSchema = new mongoose.Schema(
     //     // enum: ["Gowns", "Tops", "Accessories", "Other"],
     //   },
     // ],
-    // category: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Category",
-    //   required: [true, "Please select a product category"],
-    // },
-    
+
+    category: {
+      type: Schema.ObjectId,
+      ref: "Category",
+      required: [true, "Please select a product category"],
+    },
+
     description: {
       type: String,
       required: [true, "Please provide a product description"],
@@ -83,7 +84,7 @@ const ProductSchema = new mongoose.Schema(
 
     reviews: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.ObjectId,
         ref: "Review", // Reference Review model
       },
     ],
@@ -112,16 +113,21 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
+ProductSchema.post(/^find/, function (next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  next();
+});
+
 // QUERY INDEXES
 ProductSchema.index({ slug: 1 });
 ProductSchema.index({ price: 1 });
 
-// CREATE slug with product name
+// CREATE slug with NAME
 ProductSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-const Product = mongoose.model("Product", ProductSchema);
+const Product = model("Product", ProductSchema);
 
 export default Product;

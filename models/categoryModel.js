@@ -37,7 +37,7 @@ const Category = mongoose.model("Category", CategorySchema);
 
 export default Category;
 
-// so how best??
-//  should the child know of the parent
-// or the parent should know of the child
-// i want it t
+// 1:many === 1 category can have many product
+// so category id will be in the child model.
+
+// so when hard coding and creating it --- i need to create category first
