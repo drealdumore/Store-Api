@@ -113,7 +113,8 @@ const ProductSchema = new Schema(
   }
 );
 
-ProductSchema.post(/^find/, function (next) {
+// used post b4
+ProductSchema.get(/^find/, function (next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
 });

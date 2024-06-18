@@ -1,2 +1,0 @@
-{{URL}}/api/products?fields=name, price
-

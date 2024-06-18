@@ -6,6 +6,8 @@ import reviewRouter from "./reviewRoutes.js";
 
 const router = express.Router();
 
+// {{URL}}/api/products?fields=name, price
+
 // use reviewRoute for this. it get the product id
 router.use("/:productID/reviews", reviewRouter);
 
