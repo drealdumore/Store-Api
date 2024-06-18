@@ -3,6 +3,8 @@ import Category from "../models/categoryModel.js";
 import catchAsync from "../utilities/catchAsync.js";
 import AppError from "../utilities/appError.js";
 
+export const insertCategories = factory.insertMany(Category);
+
 export const getCategory = factory.getOneWithPopulate(Category);
 export const getAllCategories = factory.getAll(Category);
 export const updateCategory = factory.updateOne(Category);

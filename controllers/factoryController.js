@@ -1,9 +1,28 @@
 import catchAsync from "../utilities/catchAsync.js";
 import AppError from "../utilities/appError.js";
 import APIFeatures from "../utilities/apiFeatures.js";
+import slugify from "slugify";
+
 
 // this functions that can be used on different controllers.
 // params: Model e.g User, Product
+
+export const insertMany = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const docs = req.body.map((doc) => ({
+      ...doc,
+      slug: slugify(doc.name, { lower: true }),
+    }));
+
+    const insertedDocs = await Model.insertMany(docs);
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        data: insertedDocs,
+      },
+    });
+  });
 
 export const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
