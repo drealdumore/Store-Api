@@ -12,13 +12,6 @@ const ProductSchema = new Schema(
 
     slug: String,
 
-    // category: [
-    //   {
-    //     type: String,
-    //     required: [true, "Please select a product category"],
-    //     // enum: ["Gowns", "Tops", "Accessories", "Other"],
-    //   },
-    // ],
 
     category: {
       type: Schema.ObjectId,

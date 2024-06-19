@@ -90,6 +90,7 @@ import catchAsync from "../utilities/catchAsync.js";
 //     });
 //   }
 // });
+export const insertProducts = factory.insertMany(Product);
 
 export const getAllProducts = factory.getAllWithQuery(Product);
 

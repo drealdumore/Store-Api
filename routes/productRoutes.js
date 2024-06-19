@@ -11,6 +11,8 @@ const router = express.Router();
 // use reviewRoute for this. it get the product id
 router.use("/:productID/reviews", reviewRouter);
 
+router.post("/insertMany", productController.insertProducts);
+
 router
   .route("/")
   .get(productController.getAllProducts)
