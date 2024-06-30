@@ -6,7 +6,7 @@ import * as authController from "./../controllers/authController.js";
 const router = express.Router({ mergeParams: true });
 
 // only Authenticated Users can write review -- middleware
-// Works on all routes.
+// Works on all routes after it.
 router.use(authController.protect);
 
 router

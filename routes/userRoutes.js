@@ -12,10 +12,9 @@ router.route("/logout").get(authController.logout);
 router.route("/forgotPassword").post(authController.forgotPassword);
 router.route("/resetPassword/:token").patch(authController.forgotPassword);
 
-
-// Protect all routes after this middleware
+// Protect all routes after this middleware && restrict to admin
 router.use(authController.protect);
-
+router.use(authController.restrictTo("admin"));
 
 router.route("/").get(userController.getAllUsers);
 router

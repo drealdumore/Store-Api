@@ -1,9 +1,14 @@
 import express from "express";
 import * as categoryController from "../controllers/categoryController.js";
+import * as authController from "../controllers/authController.js";
 
 const router = express.Router();
 
 router.post("/insertMany", categoryController.insertCategories);
+
+// Protect all routes after this middleware && restrict to admin
+router.use(authController.protect);
+router.use(authController.restrictTo('admin'));
 
 router
   .route("/")
