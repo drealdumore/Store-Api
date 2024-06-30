@@ -1,6 +1,4 @@
 import User from "../models/userModel.js";
-import AppError from "../utilities/appError.js";
-import catchAsync from "../utilities/catchAsync.js";
 import * as factory from "./factoryController.js";
 
 export const insertUsers = factory.insertMany(User);
