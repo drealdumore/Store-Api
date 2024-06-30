@@ -7,7 +7,6 @@ export const getAllCategories = factory.getAll(CMS);
 export const updateCMS = factory.updateOne(CMS);
 export const deleteCMS = factory.deleteOne(CMS);
 
-// export const createCMS = factory.createOne(CMS);
 export const createCMS = catchAsync(async (req, res, next) => {
   const {name, description, coverImage}= req.body
   const content= await CMS.create({

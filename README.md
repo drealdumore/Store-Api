@@ -1,4 +1,4 @@
-## Node.js E-commerce Application with Express and MongoDB
+# Node.js E-commerce Application with Express and MongoDB
 
 This repository implements a full-fledged e-commerce application built using modern JavaScript technologies:
 
