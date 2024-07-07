@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import hpp from "hpp";
+import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import compression from "compression";
 
@@ -24,7 +25,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-app.enable("trust proxy");
+// app.enable("trust proxy");
 
 // MIDDLEWARES
 
@@ -66,6 +67,8 @@ const limiter = rateLimit({
 });
 
 app.use("/api", limiter);
+
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(ExpressMongoSanitize());

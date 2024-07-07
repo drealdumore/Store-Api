@@ -24,7 +24,7 @@ const ProductSchema = new Schema(
       required: [true, "Please provide a product description"],
       trim: true,
     },
-
+    
     color: {
       type: String,
       default: "Available in different colors",
