@@ -51,8 +51,7 @@ const ProductSchema = new Schema(
         message: "Discount price {{VALUE}} should be below regular price",
       },
     },
-
-    size: { type: String },
+    
 
     inStock: {
       type: Boolean,

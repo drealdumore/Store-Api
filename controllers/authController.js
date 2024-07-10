@@ -92,6 +92,7 @@ export const logout = catchAsync(async (req, res) => {
   });
 });
 
+
 // RESTRICT to Users
 export const protect = catchAsync(async (req, res, next) => {
   // get token and check validity

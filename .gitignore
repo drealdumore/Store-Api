@@ -6,6 +6,9 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+/config
+.config
+.env
 # Diagnostic reports
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -43,6 +46,7 @@ build/Release
 .env.test
 .env.development
 .env.production
+config.env
 
 # Bundler / Packager specific
 #  - Webpack

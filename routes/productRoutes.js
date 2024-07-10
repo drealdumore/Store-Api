@@ -4,6 +4,10 @@ import * as authController from "../controllers/authController.js";
 import * as reviewController from "../controllers/reviewController.js";
 import reviewRouter from "./reviewRoutes.js";
 
+
+import cloudinary from "../utilities/cloudinary.js";
+import upload from "../utilities/multer.js";
+
 const router = express.Router();
 
 // {{URL}}/api/products?fields=name, price
@@ -17,8 +21,10 @@ router
   .route("/")
   .get(productController.getAllProducts)
   .post(
-    authController.protect,
-    authController.restrictTo("admin", "manager"),
+    // authController.protect,
+    // authController.restrictTo("admin", "manager"),
+    // productController.createProduct
+    upload.fields([{ name: 'coverImage', maxCount: 1 }, { name: 'images', maxCount: 10 }]),
     productController.createProduct
   );
 

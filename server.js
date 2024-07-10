@@ -22,10 +22,7 @@ const DB = process.env.DATABASE_LOCAL_IP;
 // );
 
 mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(DB)
   .then(async () => {
     console.log("DB connection successful!");
   })
