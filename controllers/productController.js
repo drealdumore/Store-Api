@@ -97,8 +97,7 @@ export const insertProducts = factory.insertMany(Product);
 
 export const getAllProducts = factory.getAllWithQuery(Product);
 
-// export const createProduct = factory.createOne(Product);
-export const createProduct = catchAsync(async (req, res, next) => {
+export const createProduct = catchAsync(async (req, res) => {
   const {
     name,
     category,
@@ -140,7 +139,7 @@ export const createProduct = catchAsync(async (req, res, next) => {
         {
           folder: folder,
         },
-        (error, result) => {
+        (error, result) => { 
           if (error) reject(error);
           resolve(result.url);
         }

@@ -11,7 +11,7 @@ process.on("uncaughtException", (err) => {
 });
 
 // TO SEND THE CONFIG TO THE PROCESS.ENV
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./.env" });
 
 // Replace password with the actual password
 const DB = process.env.DATABASE_LOCAL_IP;
