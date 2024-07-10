@@ -92,9 +92,10 @@ export const logout = catchAsync(async (req, res) => {
   });
 });
 
-
 // RESTRICT to Users
 export const protect = catchAsync(async (req, res, next) => {
+  console.log("Checking user auth State...");
+
   // get token and check validity
   let token;
 
@@ -138,6 +139,7 @@ export const protect = catchAsync(async (req, res, next) => {
 // RESTRICT TO INPUTED ROLES
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
+    console.log("Checking user role...");
     // check if user role is in roles array
     // if not, throw error
     if (!roles.includes(req.user.role)) {
@@ -145,8 +147,8 @@ export const restrictTo = (...roles) => {
         new AppError("You do not have permission to perform this action", 403)
       );
     }
+    next();
   };
-  next();
 };
 
 // FORGOT PASSWORD

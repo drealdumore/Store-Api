@@ -4,25 +4,23 @@ import * as authController from "../controllers/authController.js";
 
 import cloudinary from "../utilities/cloudinary.js";
 import upload from "../utilities/multer.js";
+import AppError from "../utilities/appError.js";
 
 const router = express.Router();
 
+
+// Testing Multer
 router.post("/upload", upload.single("image"), function (req, res) {
-  console.log('start upload');
+  console.log("start upload");
   cloudinary.uploader.upload(req.file.path, function (err, result) {
-  console.log('uploadng...');
-    
-    
+    console.log("uploadng...");
+
     if (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'fail',
-        message: "Error",
-      });
+      return next(new AppError('Error uploading image', 500));
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: "Uploaded Successfully!",
       result,
     });

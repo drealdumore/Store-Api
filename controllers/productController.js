@@ -1,8 +1,8 @@
 import Product from "../models/productModel.js";
 import * as factory from "./factoryController.js";
 import catchAsync from "../utilities/catchAsync.js";
-import cloudinary from "../utilities/cloudinary.js";
-import upload from "../utilities/multer.js";
+import AppError from "../utilities/catchAsync.js";
+import uploadImage from "../utilities/uploadImage.js";
 
 // export const getAllProducts = catchAsync(async (req, res) => {
 //   const products = await Product.find();
@@ -97,7 +97,7 @@ export const insertProducts = factory.insertMany(Product);
 
 export const getAllProducts = factory.getAllWithQuery(Product);
 
-export const createProduct = catchAsync(async (req, res) => {
+export const createProduct = catchAsync(async (req, res, next) => {
   const {
     name,
     category,
@@ -121,42 +121,25 @@ export const createProduct = catchAsync(async (req, res) => {
     !quantity ||
     !brand
   ) {
-    return res.status(401).json({
-      status: "fail",
-      message: "All fields are required",
-    });
+    return next(new AppError("All fields are required", 400));
   }
 
   const coverImagePath = req.files.coverImage[0].path;
   const imagesPaths = req.files.images.map((file) => file.path);
 
-  const uploadImage = async (path, folder) => {
-    console.log("uploadng...");
-
-    return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload(
-        path,
-        {
-          folder: folder,
-        },
-        (error, result) => { 
-          if (error) reject(error);
-          resolve(result.url);
-        }
-      );
-    });
-  };
-
   try {
     const folderName = `products/${name}`;
 
-    console.log("start upload");
+    console.log("starting Product image upload...");
 
-    const coverImage = await uploadImage(coverImagePath, folderName);
-
-    const images = await Promise.all(
-      imagesPaths.map((path) => uploadImage(path, folderName))
-    );
+    const [coverImage, images] = await Promise.all([
+      uploadImage(coverImagePath, folderName, '0 || coverImage'),
+      Promise.all(
+        imagesPaths.map((path, index) =>
+          uploadImage(path, folderName, index + 1)
+        )
+      ),
+    ]);
 
     const newProduct = await Product.create({
       name,
@@ -180,11 +163,7 @@ export const createProduct = catchAsync(async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
-      status: "fail",
-      message: "Error uploading images",
-      error,
-    });
+    return next(new AppError("Error occurred while creating PRODUCT", 500));
   }
 });
 
@@ -193,7 +172,6 @@ export const getProduct = factory.getOne(Product);
 export const getProductWithPopulate = factory.getOneWithPopulate(Product, {
   path: "category",
 });
-
 
 // export const getProductWithPopulate = factory.getOneWithPopulate(Product, {
 //   path: "reviews",

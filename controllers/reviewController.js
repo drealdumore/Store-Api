@@ -3,7 +3,7 @@ import * as factory from "./factoryController.js";
 
 export const setProductUserIDs = (req, res, next) => {
   // allow NESTED routes
-  if (!req.body.tour) req.body.product = req.prams.productID;
+  if (!req.body.product) req.body.product = req.params.productID;
   if (!req.body.user) req.body.user = req.user.id;
 
   next();

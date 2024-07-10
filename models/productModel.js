@@ -32,7 +32,7 @@ const ProductSchema = new Schema(
 
     coverImage: {
       type: String,
-      // required: [true, "Please upload a product cover image"],
+      required: [true, "Please upload a product cover image"],
     },
 
     images: [String],
@@ -52,7 +52,6 @@ const ProductSchema = new Schema(
       },
     },
     
-
     inStock: {
       type: Boolean,
       default: true,
@@ -105,7 +104,7 @@ const ProductSchema = new Schema(
   }
 );
 
-// used post b4
+
 ProductSchema.get(/^find/, function (next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
