@@ -1,5 +1,5 @@
 import cloudinary from "../utilities/cloudinary.js";
-
+import AppError from "../utilities/appError.js";
 
 const uploadImage = async (path, folder, index) => {
   console.log(`Uploading image ${index}...`);
@@ -11,8 +11,9 @@ const uploadImage = async (path, folder, index) => {
         folder: folder,
       },
       (error, result) => {
-        if (error) reject(error);
-        resolve(result.url);
+        if (error) reject(new AppError("Error uploading image", 500));
+        resolve(result);
+        // resolve(result.url);
       }
     );
   });

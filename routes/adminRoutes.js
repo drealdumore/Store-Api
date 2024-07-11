@@ -4,7 +4,6 @@ import * as authController from "../controllers/authController.js";
 
 const router = express.Router();
 
-
 // PROTECT all routes after this middleware && restrict to admin
 router.use(authController.protect);
 router.use(authController.restrictTo("admin"));

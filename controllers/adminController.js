@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import AppError from "../utilities/appError.js";
 import catchAsync from "../utilities/catchAsync.js";
 
+// TO Make ADMIN
 export const makeAdmin = catchAsync(async (req, res, next) => {
   // check if user exists
   const user = await User.findOne({ _id: req.params.id });
@@ -25,6 +26,7 @@ export const makeAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
+// TO Change User ROLES
 export const changeUserRole = catchAsync(async (req, res, next) => {
   // check if user exists
   const user = await User.findOne({ _id: req.params.id });
@@ -34,18 +36,19 @@ export const changeUserRole = catchAsync(async (req, res, next) => {
   // ROLE to change TO
   const { role } = req.body;
 
-  // check if role is valid
+  // CHECK if role is valid
   const validRoles = ["admin", "manager", "storekeeper"];
+
   if (!validRoles.includes(role)) {
     return next(new AppError("Invalid role", 400));
   }
 
-  // check if user already has the desired role
+  // CHECK if user already has the desired role
   if (user.role === role) {
     return next(new AppError(`User is already a ${role}`, 400));
   }
 
-  // else change role
+  // CHANGE ROLE
   user.role = role;
 
   await user.save();
@@ -58,6 +61,7 @@ export const changeUserRole = catchAsync(async (req, res, next) => {
   });
 });
 
+// GET ALL ADMINS
 export const getAllAdmin = catchAsync(async (req, res, next) => {
   const admins = await User.find({ role: "admin" });
   if (!admins) {
@@ -72,6 +76,7 @@ export const getAllAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
+// GET ADMIN
 export const getAdmin = catchAsync(async (req, res, next) => {
   // 1. search if id exist && if role === admin
   const admin = await User.findOne({ _id: req.params.id, role: "admin" });
@@ -88,22 +93,7 @@ export const getAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteAdmin = catchAsync(async (req, res, next) => {
-  const admin = await User.findOneAndDelete({
-    _id: req.params.id,
-    role: "admin",
-  });
-
-  if (!admin) {
-    return next(new AppError("Admin does not exist", 404));
-  }
-
-  res.status(204).json({
-    status: "success",
-    data: null,
-  });
-});
-
+// UPDATE ADMIN DATA
 export const updateAdmin = catchAsync(async (req, res, next) => {
   const { name, email } = req.body;
   // TODO: ADD Image Upload
@@ -131,6 +121,24 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     data: {
       data: admin,
     },
+  });
+});
+
+
+// DELETE ADMIN
+export const deleteAdmin = catchAsync(async (req, res, next) => {
+  const admin = await User.findOneAndDelete({
+    _id: req.params.id,
+    role: "admin",
+  });
+
+  if (!admin) {
+    return next(new AppError("Admin does not exist", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });
 
