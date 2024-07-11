@@ -39,7 +39,7 @@ router.get("/me", userController.getMe, userController.getUser);
 router.patch("/updateMyPassword", authController.updatePassword);
 router.patch(
   "/updateMe",
-  uploadSingle,
+  userController.uploadUserPhoto,
   userController.resizeUserPhoto,
   userController.updateMe
 );

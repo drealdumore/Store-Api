@@ -8,6 +8,7 @@ import * as factory from "./factoryController.js";
 
 import catchAsync from "../utilities/catchAsync.js";
 import AppError from "../utilities/appError.js";
+import upload from "../utilities/multer.js";
 
 // To INSERT Array of users
 export const insertUsers = factory.insertMany(User);
@@ -26,9 +27,7 @@ export const deleteUser = factory.deleteOne(User);
 
 // RESIZE USER IMAGE
 export const resizeUserPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) return next(new AppError("No file uploaded!", 400));
-
-  console.log("Resizing...");
+  if (!req.file) return next();
 
   const input = req.file.path;
   const outputDir = "uploads/resized";
@@ -37,40 +36,37 @@ export const resizeUserPhoto = catchAsync(async (req, res, next) => {
   // Ensure the output directory exists
   fs.mkdirSync(outputDir, { recursive: true });
 
+  // Resize the image
+  console.log("Resizing...");
+
+  await sharp(input)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(outputPath);
+
+  console.log("Resizing done...");
+
+  // Upload to Cloudinary
+  console.log("Uploading start...");
+  const result = await cloudinary.uploader.upload(outputPath, {
+    folder: "users",
+  });
+
+  console.log("Uploading done...");
+
+  // Clean up temporary files
   try {
-    // Resize the image
-    await sharp(input)
-      .resize(500, 500)
-      .toFormat("jpeg")
-      .jpeg({ quality: 90 })
-      .toFile(outputPath);
-
-    console.log("Resizing done...");
-
-    console.log("Uploading start...");
-
-    // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(outputPath, {
-      folder: "users",
-    });
-
-    // Clean up temporary files
-    try {
-      fs.unlinkSync(outputPath);
-      fs.rmdirSync("uploads", { recursive: true });
-    } catch (cleanupError) {
-      console.error("Error cleaning up files:", cleanupError);
-    }
-
-    res.status(200).json({
-      status: "success",
-      message: "Photo uploaded successfully",
-      url: result.url,
-    });
-  } catch (error) {
-    console.error("Error processing image:", error);
-    return next(new AppError("Error processing image", 500));
+    fs.unlinkSync(outputPath);
+    fs.rmdirSync("uploads", { recursive: true });
+  } catch (cleanupError) {
+    console.error("Error cleaning up files:", cleanupError);
   }
+
+  // ADD the URL to req.body
+  req.body.photo = result.secure_url;
+
+  next();
 });
 
 // GET CURRENT USER
@@ -78,6 +74,8 @@ export const getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
+
+export const uploadUserPhoto = upload.single("photo");
 
 const filter = (obj, ...allowedFields) => {
   const newObj = {};
@@ -102,8 +100,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
   }
 
   // FILTER out unwanted fields and SELECT wanted fields to be updated
-  const filteredBody = filter(req.body, "name", "email");
-  if (req.file) filteredBody.photo = req.file.filename;
+  const filteredBody = filter(req.body, "name", "email", "photo");
 
   // UPDATE USER
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
