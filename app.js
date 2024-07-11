@@ -41,9 +41,9 @@ const app = express();
 // app.use(cors(corsOptions));
 
 // CORS
-app.use(cors());
+// app.use(cors());
 
-app.options("*", cors());
+// app.options("*", cors());
 
 // Parse incoming request data as JSON
 app.use(express.json());
@@ -84,6 +84,10 @@ app.use(
 );
 
 app.use(compression());
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the Store API");
+});
 
 // ROUTES
 app.use("/api/products", productRouter);
