@@ -47,6 +47,8 @@ export const signup = catchAsync(async (req, res, next) => {
     photo: req.body.photo,
   });
 
+  // TODO: Send Welcome Email
+
   createSendToken(newUser, 201, req, res);
 });
 
@@ -157,7 +159,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return next(new AppError("There is no user with that email address", 404));
+    return next(new AppError("No user with that email address", 404));
   }
 
   // generate RESET TOKEN
@@ -167,7 +169,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   // Temporarily disable validations to save password reset data
   await user.save({ validateBeforeSave: false });
 
-  // SEND TO USER EMAIL
+  // TODO: Send to User Mail
 
   res.status(200).json({
     status: "success",

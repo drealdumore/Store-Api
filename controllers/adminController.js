@@ -2,6 +2,62 @@ import User from "../models/userModel.js";
 import AppError from "../utilities/appError.js";
 import catchAsync from "../utilities/catchAsync.js";
 
+export const makeAdmin = catchAsync(async (req, res, next) => {
+  // check if user exists
+  const user = await User.findOne({ _id: req.params.id });
+
+  if (!user) return next(new AppError("User does not exist", 404));
+
+  // check if user role === admin
+  if (user.role === "admin")
+    return next(new AppError("User is already an admin", 400));
+
+  // else make admin
+  user.role = "admin";
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: user,
+    },
+  });
+});
+
+export const changeUserRole = catchAsync(async (req, res, next) => {
+  // check if user exists
+  const user = await User.findOne({ _id: req.params.id });
+
+  if (!user) return next(new AppError("User does not exist", 404));
+
+  // ROLE to change TO
+  const { role } = req.body;
+
+  // check if role is valid
+  const validRoles = ["admin", "manager", "storekeeper"];
+  if (!validRoles.includes(role)) {
+    return next(new AppError("Invalid role", 400));
+  }
+
+  // check if user already has the desired role
+  if (user.role === role) {
+    return next(new AppError(`User is already a ${role}`, 400));
+  }
+
+  // else change role
+  user.role = role;
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: user,
+    },
+  });
+});
+
 export const getAllAdmin = catchAsync(async (req, res, next) => {
   const admins = await User.find({ role: "admin" });
   if (!admins) {
@@ -49,12 +105,17 @@ export const deleteAdmin = catchAsync(async (req, res, next) => {
 });
 
 export const updateAdmin = catchAsync(async (req, res, next) => {
+  const { name, email } = req.body;
+  // TODO: ADD Image Upload
+
+  //? or will admin be able to update their image in their user profile??
+
   const admin = await User.findOneAndUpdate(
     {
       _id: req.params.id,
       role: "admin",
     },
-    req.body,
+    { name, email },
     {
       new: true,
       runValidators: true,
@@ -72,15 +133,6 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-export const createAdmin = catchAsync(async (req, res, next) => {
-  const admin = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role,
-  });
-});
-
 
 // how best to create admin
 // 1. change user role to admin

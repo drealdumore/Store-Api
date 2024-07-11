@@ -33,6 +33,9 @@ CategorySchema.pre("save", function (next) {
   next();
 });
 
+CategorySchema.index({ slug: 1 });
+
+
 const Category = mongoose.model("Category", CategorySchema);
 
 export default Category;

@@ -8,15 +8,27 @@ import AppError from "../utilities/appError.js";
 
 const router = express.Router();
 
+router.route("/signup").post(authController.signup);
+router.route("/login").post(authController.login);
+router.route("/logout").get(authController.logout);
 
-// Testing Multer
-router.post("/upload", upload.single("image"), function (req, res) {
+router.route("/forgotPassword").post(authController.forgotPassword);
+router.route("/resetPassword/:token").patch(authController.forgotPassword);
+
+
+
+
+
+const uploadSingle = upload.single("image");
+
+// Testing Multer && Cloudinary
+router.post("/upload", uploadSingle, function (req, res) {
   console.log("start upload");
   cloudinary.uploader.upload(req.file.path, function (err, result) {
     console.log("uploadng...");
 
     if (err) {
-      return next(new AppError('Error uploading image', 500));
+      return next(new AppError("Error uploading image", 500));
     }
 
     res.status(200).json({
@@ -27,20 +39,25 @@ router.post("/upload", upload.single("image"), function (req, res) {
   });
 });
 
+/////////////////////////////////
+router.delete("/deleteMe", userController.deleteMe);
+
 router.post("/insertMany", userController.insertUsers);
+router.post("/resize", userController.resizeUserPhoto);
 
-router.route("/signup").post(authController.signup);
-router.route("/login").post(authController.login);
-router.route("/logout").get(authController.logout);
-
-router.route("/forgotPassword").post(authController.forgotPassword);
-router.route("/resetPassword/:token").patch(authController.forgotPassword);
 
 // Protect all routes after this middleware && restrict to admin
 router.use(authController.protect);
+
+router.get('/me', userController.getMe, userController.getUser);
+
+
 router.use(authController.restrictTo("admin"));
 
+// GET all Users
 router.route("/").get(userController.getAllUsers);
+
+// GET, UPDATE and DELETE User
 router
   .route("/:id")
   .get(userController.getUser)
