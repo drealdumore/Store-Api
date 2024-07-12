@@ -35,7 +35,8 @@ const UserSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default: "default.jpg",
+    default:
+      "https://res.cloudinary.com/dvfzv1bic/image/upload/v1720788005/qcjr9fk3ycklm6nurxgl.jpg",
   },
   role: {
     type: String,
@@ -45,6 +46,7 @@ const UserSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  
   // to disable account if user deletes account
   active: {
     type: Boolean,

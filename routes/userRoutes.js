@@ -2,6 +2,7 @@ import express from "express";
 import * as userController from "../controllers/userController.js";
 import * as authController from "../controllers/authController.js";
 import upload from "../utilities/multer.js";
+import cloudinary from "../utilities/cloudinary.js";
 
 const router = express.Router();
 const uploadSingle = upload.single("image");
