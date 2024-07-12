@@ -1,6 +1,14 @@
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
+
 import User from "../models/userModel.js";
-import AppError from "../utilities/appError.js";
+import * as factory from "./factoryController.js";
+
 import catchAsync from "../utilities/catchAsync.js";
+import AppError from "../utilities/appError.js";
+import upload from "../utilities/multer.js";
 
 // TO Make ADMIN
 export const makeAdmin = catchAsync(async (req, res, next) => {
@@ -96,9 +104,6 @@ export const getAdmin = catchAsync(async (req, res, next) => {
 // UPDATE ADMIN DATA
 export const updateAdmin = catchAsync(async (req, res, next) => {
   const { name, email } = req.body;
-  // TODO: ADD Image Upload
-
-  //? or will admin be able to update their image in their user profile??
 
   const admin = await User.findOneAndUpdate(
     {
@@ -143,5 +148,3 @@ export const deleteAdmin = catchAsync(async (req, res, next) => {
 });
 
 // how best to create admin
-// 1. change user role to admin
-// 2. create admin or manager by admin

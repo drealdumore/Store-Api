@@ -86,7 +86,9 @@ app.use(
 app.use(compression());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Store API");
+  res
+    .status(200)
+    .json({ status: "success", message: "Welcome to the Store API" });
 });
 
 // ROUTES
