@@ -172,15 +172,27 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   // Temporarily disable validations to save password reset data
   await user.save({ validateBeforeSave: false });
 
-  // TODO: Send to User Mail
+  try {
+    const resetURL = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/users/resetPassword/${resetToken}`;
+    await new Email(user, resetURL).sendPasswordReset();
 
-  res.status(200).json({
-    status: "success",
-    resetToken,
-    message: "Token sent to email!",
-  });
+    res.status(200).json({
+      status: "success",
+      resetToken, // TODO: Remove later
+      message: "Token sent to email!",
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
 
-  // next();
+    return next(
+      new AppError("There was an error sending the email. Try again later!"),
+      500
+    );
+  }
 });
 
 export const resetPassword = catchAsync(async (req, res, next) => {
