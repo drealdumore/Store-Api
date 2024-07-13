@@ -3,6 +3,7 @@ import * as userController from "../controllers/userController.js";
 import * as authController from "../controllers/authController.js";
 import upload from "../utilities/multer.js";
 import cloudinary from "../utilities/cloudinary.js";
+import { sendEmail } from "../utilities/email.js";
 
 const router = express.Router();
 const uploadSingle = upload.single("image");
@@ -28,6 +29,7 @@ router.post("/upload", uploadSingle, (req, res, next) => {
     });
   });
 });
+router.post("/mail", sendEmail);
 
 // Resize user photo
 router.post("/resize", uploadSingle, userController.resizeUserPhoto);

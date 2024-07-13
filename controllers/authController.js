@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import catchAsync from "../utilities/catchAsync.js";
 import AppError from "../utilities/appError.js";
+import { Email } from "../utilities/email.js";
 
 // CREATE token using user ID
 const signToken = (id) => {
@@ -47,7 +48,9 @@ export const signup = catchAsync(async (req, res, next) => {
     photo: req.body.photo,
   });
 
-  // TODO: Send Welcome Email
+  const url = `${req.protocol}://${req.get("host")}/me`;
+  const email = new Email(newUser, url);
+  await email.sendWelcome();
 
   createSendToken(newUser, 201, req, res);
 });
