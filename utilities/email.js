@@ -25,16 +25,16 @@ export class Email {
     }
 
     // Development: Use EthereaL
-    let testAccount = await nodemailer.createTestAccount();
-    console.log(testAccount);
+    // let testAccount = await nodemailer.createTestAccount();
+    // console.log(testAccount);
     // return nodemailer.createTestAccount();
     return nodemailer.createTransport({
       host: "smtp.ethereal.email",
       port: 587,
       secure: false,
       auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
+        user: process.env.ETHEREAL_USERNAME,
+        pass: process.env.ETHEREAL_PASSWORD,
       },
     });
   }
@@ -84,16 +84,14 @@ export const sendEmail = async (req, res, next) => {
     return res.status(400).json({ error: "Invalid email address" });
   }
 
-  const user = { email: userEmail, name: "User" }; 
-  const url = "https://example.com"; 
+  const user = { email: userEmail, name: "User" };
+  const url = "https://example.com";
   try {
     const email = new Email(user, url);
-    const info = await email.sendWelcome();
+    await email.sendWelcome();
     return res.status(201).json({
       msg: "you should receive an email",
-      preview: nodemailer.getTestMessageUrl(info),
     });
-    
   } catch (error) {
     console.error("Error sending email:", error);
     return res.status(500).json({ error: error.message });
