@@ -1,8 +1,3 @@
-import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
-import path from "path";
-import sharp from "sharp";
-
 import User from "../models/userModel.js";
 import * as factory from "./factoryController.js";
 
@@ -129,7 +124,6 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-
 // DELETE ADMIN
 export const deleteAdmin = catchAsync(async (req, res, next) => {
   const admin = await User.findOneAndDelete({
@@ -146,5 +140,3 @@ export const deleteAdmin = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
-
-// how best to create admin

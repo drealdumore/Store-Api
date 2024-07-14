@@ -29,9 +29,11 @@ router.post("/upload", uploadSingle, (req, res, next) => {
     });
   });
 });
+
+// Send mail for testing
 router.post("/mail", sendEmail);
 
-// Resize user photo
+// Resize user photo for testing
 router.post("/resize", uploadSingle, userController.resizeUserPhoto);
 
 // Protect all routes after this middleware

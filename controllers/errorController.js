@@ -5,12 +5,20 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+// const handleDuplicateFieldsDB = (err) => {
+//   const value =  err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+//   console.log(value);
+//   const message = `Duplicate field value: ${value}. Please use another value!`;
+//   return new AppError(message, 400);
+// };
+
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  console.log(value);
+  const fieldName = Object.keys(err.keyValue)[0];
+  const value = err.keyValue[fieldName];
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
+
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
@@ -93,38 +101,63 @@ const sendProdError = (err, req, res) => {
   });
 };
 
+// const globalErrorHandler = (err, req, res, next) => {
+//   if (err && err.stack) {
+//     console.log(err.stack); // shows where error is from
+//   } else {
+//     console.log("Error stack is not available");
+//   }
+
+//   err.statusCode = err.statusCode || 500;
+//   err.status = err.status || "error";
+
+//   if (process.env.NODE_ENV === "development") {
+//     sendDevError(err, req, res);
+//   } else if (process.env.NODE_ENV === "production") {
+//     console.log("Running in production");
+//     console.log(err.o);
+
+//     // Invalid Product ID
+//     if (err.name === "CastError") err = handleCastErrorDB(err);
+
+//     // occurs when unique is false. creating new object with
+//     // name that already exist for unique.
+//     if (err.code === 11000) err = handleDuplicateFieldsDB(err);
+
+//     // occurs when a required is not met
+//     if (err.name === "ValidationError") err = handleValidationErrorDB(err);
+
+//     if (err.name === "JsonWebTokenError") err = handleJWTError();
+
+//     if (err.name == "TokenExpiredError") err = handleJWTExpiredError();
+
+//     sendProdError(err, req, res);
+//   }
+
+//   res.status(err.statusCode).json({
+//     status: err.status,
+//     message: err.message,
+//   });
+// };
+
 const globalErrorHandler = (err, req, res, next) => {
-  console.log(err.stack); // shows where error is from
-
   err.statusCode = err.statusCode || 500;
-  err.status = err.status | "error";
+  err.status = err.status || 'error';
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     sendDevError(err, req, res);
-  } else if (process.env.NODE_ENV === "production") {
-    console.log("Running in production");
+  } else if (process.env.NODE_ENV === 'production') {
+    let error = { ...err };
+    error.message = err.message;
 
-    // Invalid Product ID
-    if (err.name === "CastError") err = handleCastErrorDB(err);
+    if (err.name === 'CastError') error = handleCastErrorDB(error);
+    if (err.code === 11000) error = handleDuplicateFieldsDB(error);
+    if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
+    if (err.name === 'JsonWebTokenError') error = handleJWTError();
+    if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
-    // occurs when unique is false. creating new object with
-    // name that already exist for unique.
-    if (err.code === 11000) err = handleDuplicateFieldsDB(err);
-
-    // occurs when a required is not met
-    if (err.name === "ValidationError") err = handleValidationErrorDB(err);
-
-    if (err.name === "JsonWebTokenError") err = handleJWTError();
-
-    if (err.name == "TokenExpiredError") err = handleJWTExpiredError();
-
-    sendProdError(err, req, res);
+    sendProdError(error, req, res);
   }
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.nessage,
-  });
 };
 
 export default globalErrorHandler;
